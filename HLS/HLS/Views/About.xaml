@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HLS.Views.About">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Image Source="http://kob-media.ru/wp-content/uploads/2014/10/Skazochny_les.jpg" VerticalOptions="FillAndExpand"/>
+            <Image Source="https://w-dog.ru/wallpapers/2/91/557639532609461.jpg" VerticalOptions="FillAndExpand"/>
+
+            <Image Source="https://w-dog.ru/wallpapers/10/17/513651128840272.jpg" VerticalOptions="FillAndExpand"/>
+            <Image Source="http://elitefon.ru/pic/201211/1280x960/elitefon.ru-14400.jpg" VerticalOptions="FillAndExpand"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
