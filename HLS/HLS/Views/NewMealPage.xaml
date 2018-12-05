@@ -4,15 +4,17 @@
              x:Class="HLS.Views.NewMealPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Callories"/>
-            <Entry x:Name="CalloriesEntry" Keyboard="Numeric">
-                
-            </Entry>
-
+            <Image Source="mealIcon.xml" HeightRequest="100"/>
+            <Label Text="Name"/>
+            <Entry x:Name="NameEntry" Text="{Binding Name}"/>
             <Label Text="Descriprion"/>
-            <Entry x:Name="DescriptionEntry">
-                
-            </Entry>
+            <Entry x:Name="DescriptionEntry" Text="{Binding Description}"/>
+
+            <Label Text="Calories"/>
+            <Entry x:Name="CaloriesEntry" Keyboard="Numeric" Placeholder="Calories" Text="{Binding CaloriesText}"/>
+            <Label Text="List of dishes:"/>
+            <Label Text="{Binding DishesList}"/>
+            <Button x:Name="CorrectDishesButton" Text="Correct..."/>
             <Button x:Name="AcceptButton"  Text="Push to add"/>
         </StackLayout>
     </ContentPage.Content>

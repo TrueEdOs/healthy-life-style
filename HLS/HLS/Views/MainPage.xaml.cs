@@ -47,7 +47,9 @@ namespace HLS.Views
             {
                 Detail = newPage;
                 if (Device.RuntimePlatform == Device.Android)
-                    await Task.Delay(100);
+                {
+                    await Task.Delay(105);
+                }
                  IsPresented = false;
            }
         }

@@ -5,17 +5,17 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using SQLite;
 
-namespace HLS.Structures
+namespace HLS.Models
 {
     public class BaseLifeUnit : INotifyPropertyChanged 
     {
         [PrimaryKey, AutoIncrement]
-        public int ID { get; set; } = 0;
+        public int ID { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
         public string Description { get; set; } = "";
-        public int Callories { get; set; } = 0;
         public string Type { get; set; } = "";
+        public string Name { get; set; } = "";
         public string Properties { get; set; } = "";
         
         public string GetDateString()
@@ -40,7 +40,6 @@ namespace HLS.Structures
             hashCode = hashCode * 666777 + Date.GetHashCode();
             hashCode = hashCode * 666777 + Description.GetHashCode();
             hashCode = hashCode * 666777 + Type.GetHashCode();
-            hashCode = hashCode * 666777 + Callories.GetHashCode();
             return hashCode;
         }
 

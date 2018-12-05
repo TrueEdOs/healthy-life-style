@@ -7,138 +7,101 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Collections.Specialized;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using HLS.Models;
 
 namespace HLS.Structures
 {
-    public class HealthyLifeStyleDataBase : IEnumerable<BaseLifeUnit>
+    public class HealthyLifeStyleDataBase
     {
-        public const string filename = "BLF.db3";
+        private string filename;
+        private readonly ObservableCollection<Meal> meals = new ObservableCollection<Meal>();
+        private SQLiteAsyncConnection database = null;
 
-        public IEnumerator<BaseLifeUnit> GetEnumerator()
+        private void LoadMeals()
         {
-            return new BaseLifeUnitEnum(this);
+            foreach(var meal in getAllBaseLifeUnit())
+                if(meal.Type == "meal")
+                    meals.Add(new Meal(true));
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        private void SyncMeals()
         {
-            return GetEnumerator();
-        }
-
-        public class BaseLifeUnitEnum : IEnumerator<BaseLifeUnit>
-        {
-            private HealthyLifeStyleDataBase _parent;
-            private int _index = -1;
-            private int _maxBufferSize = 16;
-            private bool _disposedValue = false;
-
-            protected int offset = 0;
-            protected List<BaseLifeUnit> bufferList = new List<BaseLifeUnit>();
-
-            public BaseLifeUnit lastBuffered = null;
-
-            public BaseLifeUnitEnum(HealthyLifeStyleDataBase parent)
+            foreach (var meal in meals)
             {
-                _parent = parent;
-                RefreshBuffer();
-            }
 
-            public BaseLifeUnitEnum(HealthyLifeStyleDataBase parent, int customBufferSize)
-            {
-                _parent = parent;
-                _maxBufferSize = customBufferSize;
-                RefreshBuffer();
-            }
-
-            private void RefreshBuffer()
-            {
-                // TO DO
-            }
-
-            public BaseLifeUnit Current {
-                get
+                if (!meal.Synced)
                 {
-                    if (_parent == null || bufferList == null || _index != -1)
-                    {
-                        throw new InvalidOperationException();
-                    }
-
-                    return bufferList[_index];
+                    Debug.Print("SING5 ");
+                    //Database.InsertAsync(meal.Serealize()).Wait();
                 }
+                else
+                    Debug.Print("SIGN6 ");
             }
-
-            object IEnumerator.Current => Current;
-
-            public void Dispose()
+            /*if(getAllBaseLifeUnit().Count != meals.Count)
             {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-
-            protected virtual void Dispose(bool disposing)
-            {
-                if (!this._disposedValue)
-                {
-                    if (disposing)
-                    {
-                        bufferList = null;
-                    }
-                    _parent = null;
-                }
-
-                this._disposedValue = true;
-            }
-
-            public bool MoveNext()
-            {
-                _index++;
-                if(_index == bufferList.Count)
-                {
-                    _index = 0;
-                    offset += bufferList.Count;
-                    RefreshBuffer();
-                }
-                return _index < bufferList.Count;
-            }
-
-            public void Reset()
-            {
-                throw new NotImplementedException();
-            }
-
-            ~BaseLifeUnitEnum()
-            {
-                Dispose(false);
-            }
+                throw new Exception();
+            }*/
         }
-
-        private SQLiteAsyncConnection database;
-
-        public HealthyLifeStyleDataBase()
+        private void MealsUpdated(object sender, NotifyCollectionChangedEventArgs e)
         {
-            
+            SyncMeals();
         }
+
+        public HealthyLifeStyleDataBase(string filename)
+        {
+            this.filename = filename;
+            LoadMeals();
+            meals.CollectionChanged += MealsUpdated;
+        }
+
         
-        public List<BaseLifeUnit> getAllBaseLifeUnit()
+
+        private List<BaseLifeUnit> getAllBaseLifeUnit()
         {
-            return Database.QueryAsync<BaseLifeUnit>("SELECT * " +
-                "FROM [BaseLifeUnit] ORDER BY [Date] ASC, [ID] DESC " + $"LIMIT 1").Result;
+                return Database.Table<BaseLifeUnit>().ToListAsync().Result;
         }
 
-        private void openDatabase(string path)
+        private void OpenDatabase(string path)
         {
             database = new SQLiteAsyncConnection(path);
-            database.CreateTableAsync<BaseLifeUnit>().Wait();
+            try
+            {
+                database.CreateTableAsync<BaseLifeUnit>().Wait();
+            }catch(Exception e)
+            {
+                Debug.Print("SIGN4 " + e);
+            }
         }
+
         public SQLiteAsyncConnection Database
         {
             get
             {
-                if (database == null)
-                    openDatabase(DependencyService.Get<ISQLite>().GetDatabasePath(filename));
+                try
+                {
+                    if (database == null)
+                    {
+                        Debug.Print("SIGN1 -> " + DependencyService.Get<ISQLite>().GetDatabasePath(filename));
+                        OpenDatabase(DependencyService.Get<ISQLite>().GetDatabasePath(filename));
+                        Debug.Print("SIGN2 -> " + DependencyService.Get<ISQLite>().GetDatabasePath(filename));
+                    }
+                }catch(Exception e)
+                {
+                    Debug.Print("SIGN3 " + e);
+                }
                  return database;
             }
         }
 
+        public ObservableCollection<Meal> Meals
+        {
+            get
+            {
+                return meals;
+            }
+        }
         public async Task RemoveAsync(BaseLifeUnit blf)
         {
             await Database.DeleteAsync(blf);

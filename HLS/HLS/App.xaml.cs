@@ -1,4 +1,5 @@
-﻿using HLS.Structures;
+﻿using HLS.Models;
+using HLS.Structures;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,12 +11,11 @@ namespace HLS
 {
     public partial class App : Application
     {
-        public static ObservableCollection<BaseLifeUnit> Meals = new ObservableCollection<BaseLifeUnit>();
+        public static readonly HealthyLifeStyleDataBase Database = new HealthyLifeStyleDataBase("HLS.db3");
 
         public App()
         {
             InitializeComponent();
-
             MainPage = new Views.MainPage();
         }
 
