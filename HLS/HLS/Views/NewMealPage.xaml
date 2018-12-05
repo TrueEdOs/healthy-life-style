@@ -10,10 +10,9 @@
             <Label Text="Descriprion"/>
             <Entry x:Name="DescriptionEntry" Text="{Binding Description}"/>
 
-            <Label Text="Calories"/>
-            <Entry x:Name="CaloriesEntry" Keyboard="Numeric" Placeholder="Calories" Text="{Binding CaloriesText}"/>
             <Label Text="List of dishes:"/>
             <Label Text="{Binding DishesList}"/>
+            
             <Button x:Name="CorrectDishesButton" Text="Correct..."/>
             <Button x:Name="AcceptButton"  Text="Push to add"/>
         </StackLayout>

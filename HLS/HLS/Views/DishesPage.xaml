@@ -4,7 +4,7 @@
              x:Class="HLS.Views.DishesPage">
     <ContentPage.Content>
         <ListView x:Name="DishesListView"
-                  ItemsSource="{Binding Meals}"
+                  ItemsSource="{Binding Dishes}"
                   IsPullToRefreshEnabled="False"
                   >
             <ListView.ItemTemplate>
