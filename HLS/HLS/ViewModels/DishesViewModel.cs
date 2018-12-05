@@ -9,7 +9,14 @@ namespace HLS.ViewModels
     public class DishesViewModel
     {
         public Dish selectedDish = null;
-        
+        public O
+        public class DishRepresentation
+        {
+            public String Name { get; set; }
+            public String Count { get; set; }
+            public Dish Original { get; set; }
+        }
+
         public DishesViewModel(Meal meal)
         {
 
