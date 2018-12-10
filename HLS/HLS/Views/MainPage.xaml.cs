@@ -35,7 +35,7 @@ namespace HLS.Views
                         Pages.Add(pageId, new NavigationPage(new BasicListPage<Meal>(App.Database.Meals)));
                         break;
                     case 2:
-                        Pages.Add(pageId, new NavigationPage(new TrainingsPage()));
+                        Pages.Add(pageId, new NavigationPage(new BasicListPage<Training>(App.Database.Trainings)));
                         break;
                     case 3:
                         Pages.Add(pageId, new NavigationPage(new About()));

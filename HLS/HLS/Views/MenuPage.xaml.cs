@@ -9,16 +9,16 @@ using Xamarin.Forms.Xaml;
 
 namespace HLS.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MenuPage : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MenuPage : ContentPage
+    {
         private List<MenuItem> Items;
         MainPage MainPage { get => (MainPage)Application.Current.MainPage; }
 
-        public MenuPage ()
-		{
-            
-            InitializeComponent ();
+        public MenuPage()
+        {
+
+            InitializeComponent();
             Items = new List<MenuItem>{
                 new MenuItem {ID = 0, Title = "FrontPage"},
                 new MenuItem {ID = 1, Title = "Meals"},
@@ -26,20 +26,20 @@ namespace HLS.Views
                 new MenuItem {ID = 3, Title = "About"}
             };
 
-            ListViewMenu.ItemsSource= Items;
+            ListViewMenu.ItemsSource = Items;
             ListViewMenu.SelectedItem = 0;
             ListViewMenu.SelectedItem = Items[0];
             ListViewMenu.ItemSelected += async (sender, e) =>
             {
                 if (e.SelectedItem == null)
                     return;
-                
-                    
-                    await MainPage.NavigateToPage(((MenuItem)((ListView)sender).SelectedItem).ID);
-        
+
+
+                await MainPage.NavigateToPage(((MenuItem)((ListView)sender).SelectedItem).ID);
+
             };
         }
-        
+
         private class MenuItem
         {
             public int ID { get; set; }

@@ -22,7 +22,7 @@ namespace HLS.ViewModels
             {
                 if (e.OldItems == null)
                     return;
-                foreach(var x in e.OldItems)
+                foreach (var x in e.OldItems)
                     if (collection.Contains((T)((BasicRepresentationModel)x).Original))
                     {
                         collection.Remove((T)((BasicRepresentationModel)x).Original);

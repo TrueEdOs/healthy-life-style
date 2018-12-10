@@ -17,6 +17,10 @@ namespace HLS.Structures
     {
         private string filename;
         private readonly ObservableCollection<Meal> meals = new ObservableCollection<Meal>();
+        private readonly ObservableCollection<Training> trainings = new ObservableCollection<Training>();
+        private readonly ObservableCollection<Dish> dishes = new ObservableCollection<Dish>();
+        private readonly ObservableCollection<Exercise> exercises = new ObservableCollection<Exercise>();
+
         private SQLiteAsyncConnection database = null;
 
         private void LoadMeals()
@@ -102,6 +106,31 @@ namespace HLS.Structures
                 return meals;
             }
         }
+
+        public ObservableCollection<Training> Trainings
+        {
+            get
+            {
+                return trainings;
+            }
+        }
+
+        public ObservableCollection<Dish> Dishes
+        {
+            get
+            {
+                return dishes;
+            }
+        }
+
+        public ObservableCollection<Exercise> Exercises
+        {
+            get
+            {
+                return exercises;
+            }
+        }
+
         public async Task RemoveAsync(BaseLifeUnit blf)
         {
             await Database.DeleteAsync(blf);

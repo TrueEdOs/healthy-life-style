@@ -27,7 +27,7 @@ namespace HLS.Models
         [Ignore]
         public double Calories { get; set; }
         [Ignore]
-        public ObservableCollection<Tuple<Dish, double>> Dishes { get; private set; }
+        public ObservableCollection<Tuple<Dish, double>> Dishes { get; private set; } = new ObservableCollection<Tuple<Dish, double>>();
         [Ignore]
         public bool Synced { get; set; } = false;
 

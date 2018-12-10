@@ -16,5 +16,6 @@ namespace HLS.Models
         public double CalloriesSpend { get; set; }
         public double ProteinsSpend { get; set; }
         public double CarbohydratesSpend { get; set; }
+        public double FatsSpend { get; set; }
     }
 }

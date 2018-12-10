@@ -21,10 +21,12 @@ namespace HLS.Views
             viewModel = new NewMealViewModel(new Meal(false));
             BindingContext = viewModel;
 			InitializeComponent ();
+
             CorrectDishesButton.Clicked += (sender, e) =>
             {
                 viewModel.CorrectDishes(this);
             };
+
             AcceptButton.Clicked += (sender, e) => {
                 if (viewModel.Accept())
                 {

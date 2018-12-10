@@ -20,8 +20,7 @@ namespace HLS.ViewModels
 
         public NewMealViewModel(Meal meal)
         {
-            this.meal = meal;
-          
+            this.meal = meal;  
         }
 
         public bool Accept()
@@ -32,7 +31,7 @@ namespace HLS.ViewModels
 
         public void CorrectDishes(ContentPage page)
         {
-            page.Navigation.PushAsync(new DishesPage(meal));
+            page.Navigation.PushAsync(new BasicListPage<Tuple<Dish, double>>(meal.Dishes));
         }
     }
 }

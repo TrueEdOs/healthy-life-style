@@ -20,32 +20,40 @@ namespace HLS.Models
                 return;
             }
 
+            if(o is Dish)
+            {
+                Init((Dish)o);
+                return;
+            }
+
+            if (o is Tuple<Dish, double>)
+            {
+                Init((Dish)o);
+                return;
+            }
+
             throw new NotImplementedException();
         }
 
-        public void Init(Meal meal)
+
+        private void Init(Meal meal)
         {
             Title = meal.Name;
             Description = meal.Calories.ToString();
         }
 
-        public BasicRepresentationModel(Meal meal)
-        {
-            Title = meal.Name;
-            Description = meal.Calories.ToString();
-        }
-
-        public BasicRepresentationModel(Dish dish)
+        private void Init(Dish dish)
         {
             Title = dish.Name;
             Description = dish.CalloriesSpend.ToString();
         }
 
-        public BasicRepresentationModel(Tuple<Dish, double> dish)
+        private void Init(Tuple<Dish, double> dish)
         {
             Title = dish.Item1.Name;
             Description = "Count " + dish.Item2;
         }
+   
 
         public BasicRepresentationModel(Training training)
         {
