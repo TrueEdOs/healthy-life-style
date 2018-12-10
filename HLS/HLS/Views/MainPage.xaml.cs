@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HLS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace HLS.Views
                         Pages.Add(pageId, new NavigationPage(new FrontPage()));
                         break;
                     case 1:
-                        Pages.Add(pageId, new NavigationPage(new MealsPage()));
+                        Pages.Add(pageId, new NavigationPage(new BasicListPage<Meal>(App.Database.Meals)));
                         break;
                     case 2:
                         Pages.Add(pageId, new NavigationPage(new TrainingsPage()));

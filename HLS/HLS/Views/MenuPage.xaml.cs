@@ -21,8 +21,8 @@ namespace HLS.Views
             InitializeComponent ();
             Items = new List<MenuItem>{
                 new MenuItem {ID = 0, Title = "FrontPage"},
-                new MenuItem {ID = 2, Title = "Meals"},
-                new MenuItem {ID = 1, Title = "Trainings"},
+                new MenuItem {ID = 1, Title = "Meals"},
+                new MenuItem {ID = 2, Title = "Trainings"},
                 new MenuItem {ID = 3, Title = "About"}
             };
 
