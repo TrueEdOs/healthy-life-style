@@ -18,6 +18,11 @@ namespace HLS.ViewModels
         public BasicListViewModel(ObservableCollection<T> collection)
         {
             this.collection = collection;
+            foreach(var x in collection)
+            {
+                RepresentationCollection.Add(new BasicRepresentationModel((T)x));
+            }
+
             RepresentationCollection.CollectionChanged += (sender, e) =>
             {
                 if (e.OldItems == null)
@@ -44,11 +49,19 @@ namespace HLS.ViewModels
 
         public async void Add(ContentPage page)
         {
-            Type tt = typeof(T);
-            if (tt.Equals(typeof(Meal)))
+            if (typeof(T).Equals(typeof(Meal)))
             {
                 await page.Navigation.PushAsync(new NewMealPage());
+                return;
             }
+            
+            if (typeof(T).Equals(typeof(Tuple<Dish, double>)))
+            {
+                await page.Navigation.PushAsync(new NewExistingPage<Dish>((ObservableCollection < Tuple<Dish, double> >)(object) collection));
+                return;
+            }
+
+            throw new NotImplementedException();
         }
 
         public void Edit(ContentPage page)

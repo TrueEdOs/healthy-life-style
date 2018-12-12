@@ -15,8 +15,10 @@ namespace HLS.Views
         private BasicListViewModel<T> viewModel;
         public BasicListPage(ObservableCollection<T> collection)
         {
+            
             viewModel = new BasicListViewModel<T>(collection);
             BindingContext = viewModel;
+
             ToolbarItems.Add(new ToolbarItem("", "addIcon.xml", () =>
             { viewModel.Add(this); }));
 

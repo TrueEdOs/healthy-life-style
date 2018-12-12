@@ -28,7 +28,7 @@ namespace HLS.Models
 
             if (o is Tuple<Dish, double>)
             {
-                Init((Dish)o);
+                Init((Tuple<Dish, double>)o);
                 return;
             }
 

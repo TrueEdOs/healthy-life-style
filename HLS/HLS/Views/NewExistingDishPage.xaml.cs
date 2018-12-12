@@ -16,6 +16,7 @@ namespace HLS.Views
 	{
         private ObservableCollection<Tuple<Dish, double>> collectionToChange;
         public string Count { get; set; }
+        public Dish selectedDish = null;
 		public NewExistingDishPage (ObservableCollection<Tuple<Dish, double>> collection)
 		{
 			InitializeComponent ();
@@ -29,13 +30,22 @@ namespace HLS.Views
                 }
                 DishPicker.Items.Add("Add new....");
             };
-            AcceptButton.Clicked += (sender, e)=> { };
+            AcceptButton.Clicked += (sender, e)=>
+            {
+                if (selectedDish != null && double.TryParse(Count, out double x))
+                {
+                    collectionToChange.Add(new Tuple<Dish, double>(selectedDish, x));
+                    this.Navigation.PopAsync();
+                }
+            };
         }
 
         private void DishPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DishPicker.SelectedIndex = collectionToChange.Count;
-            AddNewDish();
+            if (DishPicker.SelectedIndex == collectionToChange.Count)
+                AddNewDish();
+            else
+                selectedDish = App.Database.Dishes[DishPicker.SelectedIndex];
         }
 
         private void AddNewDish()
