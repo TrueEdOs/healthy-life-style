@@ -17,7 +17,19 @@ namespace HLS.ViewModels
         public double Calories { get { return meal.Calories; } set { meal.Calories = value; } }
         public string CaloriesText { get { return Calories.ToString(); } set {
                 try { Calories = double.Parse(value); Debug.Print("Right + " + value); } catch (Exception e) { Debug.Print("Wrong + " + value); } } }
-
+        public string DishesList {
+            get
+            {
+                if (meal.Dishes.Count == 0)
+                    return "There are nothing there!";
+                string res = "";
+                foreach(var x in meal.Dishes)
+                {
+                    res += x.Item1.Name + " - " + x.Item2 + " gramm";
+                }
+                return res;
+            }
+        }
         public NewMealViewModel(Meal meal)
         {
             this.meal = meal;  

@@ -32,6 +32,23 @@ namespace HLS.Models
                 return;
             }
 
+            if (o is Training)
+            {
+                Init((Training)o);
+                return;
+            }
+
+            if (o is Exercise)
+            {
+                Init((Exercise)o);
+                return;
+            }
+
+            if (o is Tuple<Exercise, double>)
+            {
+                Init((Tuple<Exercise, double>)o);
+                return;
+            }
             throw new NotImplementedException();
         }
 
@@ -55,23 +72,22 @@ namespace HLS.Models
         }
    
 
-        public BasicRepresentationModel(Training training)
+        public void Init(Training training)
         {
             Title = training.Name;
             Description = training.Calories.ToString();
         }
 
-        public BasicRepresentationModel(Exercise exercise)
+        public void Init(Exercise exercise)
         {
             Title = exercise.Name;
             Description = exercise.CalloriesSpend.ToString();
         }
 
-        public BasicRepresentationModel(Tuple<Exercise, double> exercise)
+        public void Init(Tuple<Exercise, double> exercise)
         {
             Title = exercise.Item1.Name;
             Description = "Count " + exercise.Item2;
         }
-
     }
 }
