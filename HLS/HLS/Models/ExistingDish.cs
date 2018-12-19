@@ -11,17 +11,16 @@ namespace HLS.Models
     {
         public Meal Meal { get; set; }
         public Dish Dish { get; set; }
-        public double Amount { get; set; }
 
-        public ObservableCollection<Dish> Collection{ get;set ;}
+        public double Amount { get; set; }
 
         public string Title => Dish.Name;
 
         public string Description => "Amount " + Amount + " gramm";
 
+        public ContentPage EditablePage => throw new NotImplementedException();
 
-        public ContentPage EditablePage => new NewExistingPage<Dish>(Models.Meal.Dishes);
+        public ObservableCollection<ExistingDish> Collection => Meal.Dishes;
 
-        ObservableCollection<ExistingDish> IModel<ExistingDish>.Collection { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

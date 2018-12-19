@@ -16,9 +16,10 @@ namespace HLS.Views
 	public partial class NewMealPage : ContentPage
 	{
         private NewMealViewModel viewModel;
-		public NewMealPage ()
+        public NewMealPage() : this(new Meal()) { }
+		public NewMealPage (Meal meal)
 		{
-            viewModel = new NewMealViewModel(new Meal(false));
+            viewModel = new NewMealViewModel(meal);
             BindingContext = viewModel;
 			InitializeComponent ();
 

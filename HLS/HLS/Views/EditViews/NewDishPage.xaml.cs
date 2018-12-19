@@ -16,17 +16,21 @@ namespace HLS.Views
 	public partial class NewDishPage : ContentPage
 	{
         public NewDishViewModel viewModel;
-		public NewDishPage (Dish dish)
+        
+        public NewDishPage():this(new Dish())
+        { }
+
+        public NewDishPage (Dish dish)
 		{
+            
             InitializeComponent();
             viewModel = new NewDishViewModel(dish);
             BindingContext = viewModel;
             AcceptButton.Clicked += (sender, e)=>
             {
-                Debug.Print("SING10");
                 if (viewModel.Accept())
                     this.Navigation.PopAsync();
             }; 
         }
-	}
+    }
 }

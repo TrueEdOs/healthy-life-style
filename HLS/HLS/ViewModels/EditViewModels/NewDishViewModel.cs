@@ -1,6 +1,7 @@
 ﻿using HLS.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace HLS.ViewModels
@@ -61,12 +62,9 @@ namespace HLS.ViewModels
 
         public bool Accept()
         {
-            if(App.Database.Dishes.Contains(editableDish))
-            {
-                App.Database.Dishes.Remove(editableDish);
-            }
-
-            App.Database.Dishes.Add(editableDish);
+            Debug.Print("SING12 ADDED");
+            App.Database.DishesRepository.AddOrUpdate(editableDish);
+            
             return true;
         }
     }

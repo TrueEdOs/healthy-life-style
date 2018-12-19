@@ -81,7 +81,7 @@ namespace HLS.Models
         public void Init(Exercise exercise)
         {
             Title = exercise.Name;
-            Description = exercise.CalloriesSpend.ToString();
+            Description = exercise.CaloriesSpend.ToString();
         }
 
         public void Init(Tuple<Exercise, double> exercise)

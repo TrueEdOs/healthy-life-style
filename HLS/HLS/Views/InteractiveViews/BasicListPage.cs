@@ -10,23 +10,14 @@ using Xamarin.Forms;
 
 namespace HLS.Views
 {
-    public class BasicListPage<T> : ContentPage
+    public class BasicListPage<T> : ContentPage where T : IModel<T>
     {
         private BasicListViewModel<T> viewModel;
-        public BasicListPage(ObservableCollection<T> collection)
+        
+        public BasicListPage(ObservableCollection<T> collection, App.CreatePage createPage)
         {
-            
-            viewModel = new BasicListViewModel<T>(collection);
+            viewModel = new BasicListViewModel<T>(collection, createPage);
             BindingContext = viewModel;
-
-            ToolbarItems.Add(new ToolbarItem("", "addIcon.xml", () =>
-            { viewModel.Add(this); }));
-
-            ToolbarItems.Add(new ToolbarItem("", "checkIcon.xml", () =>
-            { viewModel.Edit(this); }));
-
-            ToolbarItems.Add(new ToolbarItem("", "deleteIcon.xml", () =>
-            { viewModel.Delete(); }));
 
             ListView list = new ListView
             {
@@ -50,11 +41,12 @@ namespace HLS.Views
                         }
                     };
                 })
+
             };
 
             list.ItemSelected += (sender, e) =>
             {
-                viewModel.selectedItem = (BasicRepresentationModel)e.SelectedItem;
+                viewModel.selectedItem = (T)e.SelectedItem;
             };
 
             Content = new StackLayout
@@ -63,6 +55,16 @@ namespace HLS.Views
                     list
                 }
             };
+
+
+            ToolbarItems.Add(new ToolbarItem("", "addIcon.xml", () =>
+            { viewModel.Add(this); }));
+
+            ToolbarItems.Add(new ToolbarItem("", "checkIcon.xml", () =>
+            { if(list.SelectedItem != null) viewModel.Edit(this); }));
+
+            ToolbarItems.Add(new ToolbarItem("", "deleteIcon.xml", () =>
+            { if(list.SelectedItem != null) viewModel.Delete(); }));
         }
     }
 }

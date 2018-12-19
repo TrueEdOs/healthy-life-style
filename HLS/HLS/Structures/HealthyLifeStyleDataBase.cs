@@ -15,56 +15,48 @@ namespace HLS.Structures
 {
     public class HealthyLifeStyleDataBase
     {
-        private string filename;
+        private readonly string filename;
         private readonly ObservableCollection<Meal> meals = new ObservableCollection<Meal>();
         private readonly ObservableCollection<Training> trainings = new ObservableCollection<Training>();
         private readonly ObservableCollection<Dish> dishes = new ObservableCollection<Dish>();
         private readonly ObservableCollection<Exercise> exercises = new ObservableCollection<Exercise>();
+        private readonly Repository<Meal> mealsRepository;
+        private readonly Repository<Dish> dishesRepository;
+        private readonly Repository<Training> trainingsRepository;
+        private readonly Repository<Exercise> exerciseRepository;
 
         private SQLiteAsyncConnection database = null;
-
-        private void LoadMeals()
-        {
-            foreach(var meal in getAllBaseLifeUnit())
-                if(meal.Type == "meal")
-                    meals.Add(new Meal(true));
-        }
-
-        private void SyncMeals()
-        {
-            foreach (var meal in meals)
-            {
-
-                if (!meal.Synced)
-                {
-                    Debug.Print("SING5 ");
-                    //Database.InsertAsync(meal.Serealize()).Wait();
-                }
-                else
-                    Debug.Print("SIGN6 ");
-            }
-            /*if(getAllBaseLifeUnit().Count != meals.Count)
-            {
-                throw new Exception();
-            }*/
-        }
-        private void MealsUpdated(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            SyncMeals();
-        }
 
         public HealthyLifeStyleDataBase(string filename)
         {
             this.filename = filename;
-            LoadMeals();
-            meals.CollectionChanged += MealsUpdated;
+           
+            LoadEntities();
+            dishesRepository = new Repository<Dish>(Database, dishes);
+            mealsRepository = new Repository<Meal>(Database, meals);
+
+            exerciseRepository = new Repository<Exercise>(Database, exercises);
+            trainingsRepository = new Repository<Training>(Database, trainings);
+            DeserializeEntities();
         }
 
-        
-
-        private List<BaseLifeUnit> getAllBaseLifeUnit()
+        private void LoadEntities()
         {
-                return Database.Table<BaseLifeUnit>().ToListAsync().Result;
+            Debug.Print("SIGN24 " + Database.Table<Meal>().ToListAsync().Result.Count.ToString());
+            foreach (var x in Database.Table<Meal>().ToListAsync().Result)
+                meals.Add(x);
+            foreach (var x in Database.Table<Dish>().ToListAsync().Result)
+                dishes.Add(x);
+            foreach (var x in Database.Table<Training>().ToListAsync().Result)
+                trainings.Add(x);
+            foreach (var x in Database.Table<Exercise>().ToListAsync().Result)
+                exercises.Add(x);
+        }
+
+        private async void DeserializeEntities()
+        {
+            await Task.Run( ()=> mealsRepository.DeserializeAll());
+            await Task.Run( () => trainingsRepository.DeserializeAll());
         }
 
         private void OpenDatabase(string path)
@@ -72,8 +64,12 @@ namespace HLS.Structures
             database = new SQLiteAsyncConnection(path);
             try
             {
-                database.CreateTableAsync<BaseLifeUnit>().Wait();
-            }catch(Exception e)
+                database.CreateTableAsync<Meal>().Wait();
+                database.CreateTableAsync<Training>().Wait();
+                database.CreateTableAsync<Dish>().Wait();
+                database.CreateTableAsync<Exercise>().Wait();
+            }
+            catch(Exception e)
             {
                 Debug.Print("SIGN4 " + e);
             }
@@ -87,68 +83,23 @@ namespace HLS.Structures
                 {
                     if (database == null)
                     {
-                        Debug.Print("SIGN1 -> " + DependencyService.Get<ISQLite>().GetDatabasePath(filename));
                         OpenDatabase(DependencyService.Get<ISQLite>().GetDatabasePath(filename));
-                        Debug.Print("SIGN2 -> " + DependencyService.Get<ISQLite>().GetDatabasePath(filename));
                     }
                 }catch(Exception e)
                 {
                     Debug.Print("SIGN3 " + e);
                 }
-                 return database;
+                
+                return database;
             }
         }
 
-        public ObservableCollection<Meal> Meals
-        {
-            get
-            {
-                return meals;
-            }
-        }
+        public Repository<Exercise> ExercisesRepository => exerciseRepository;
 
-        public ObservableCollection<Training> Trainings
-        {
-            get
-            {
-                return trainings;
-            }
-        }
+        public Repository<Training> TrainingsRepository => trainingsRepository;
 
-        public ObservableCollection<Dish> Dishes
-        {
-            get
-            {
-                return dishes;
-            }
-        }
+        public Repository<Dish> DishesRepository => dishesRepository;
 
-        public ObservableCollection<Exercise> Exercises
-        {
-            get
-            {
-                return exercises;
-            }
-        }
-
-        public async Task RemoveAsync(BaseLifeUnit blf)
-        {
-            await Database.DeleteAsync(blf);
-            //CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, blf));
-        }
-
-        public async Task AddAsync(BaseLifeUnit blf)
-        {
-            if(blf.ID != 0)
-                await Database.UpdateAsync(blf);
-            else
-                await Database.InsertAsync(blf);
-            //CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, blf));
-        }
-
-        public void Add(BaseLifeUnit blf)
-        {
-            Task.Run(() => AddAsync(blf)).GetAwaiter().GetResult();
-        }
+        public Repository<Meal> MealsRepository => mealsRepository;
     }
 }

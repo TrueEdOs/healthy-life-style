@@ -14,10 +14,49 @@ namespace HLS.Views
     public partial class MainPage : MasterDetailPage
     {
         public static Dictionary<int, NavigationPage> Pages = new Dictionary<int, NavigationPage>();
+        public static List<MenuItem> CreatablePages = new List<MenuItem>();
+        public class MenuItem
+        {
+            public int ID { get; set; }
+            public String Title { get; set; }
+            public App.CreatePage CreatePage { get; set; }
+            public static int cnt = 0;
+            public MenuItem() { ID = cnt++; }
+        }
+
         public MainPage()
         {
-  
-            Master = new MenuPage();
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "Front page",
+                CreatePage = () => new FrontPage()
+            });
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "Meals",
+                CreatePage = () => new BasicListPage<Meal>(App.Database.MealsRepository.Collection, () => new NewMealPage())
+            });
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "Training",
+                CreatePage = () => new BasicListPage<Training>(App.Database.TrainingsRepository.Collection, () => new NewTrainingPage())
+            });
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "Dishes",
+                CreatePage = () => new BasicListPage<Dish>(App.Database.DishesRepository.Collection, () => new NewDishPage())
+            });
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "Exercises",
+                CreatePage = () => new BasicListPage<Exercise>(App.Database.ExercisesRepository.Collection, () => new NewExercisePage())
+            });
+            CreatablePages.Add(new MenuItem
+            {
+                Title = "About",
+                CreatePage = () => new About()
+            });
+            Master = new MenuPage(CreatablePages);
             Detail = new NavigationPage(new FrontPage());
             InitializeComponent();
         }
@@ -26,21 +65,7 @@ namespace HLS.Views
         {
             if (!Pages.ContainsKey(pageId))
             {
-                switch (pageId)
-                {
-                    case 0:
-                        Pages.Add(pageId, new NavigationPage(new FrontPage()));
-                        break;
-                    case 1:
-                        Pages.Add(pageId, new NavigationPage(new BasicListPage<Meal>(App.Database.Meals)));
-                        break;
-                    case 2:
-                        Pages.Add(pageId, new NavigationPage(new BasicListPage<Training>(App.Database.Trainings)));
-                        break;
-                    case 3:
-                        Pages.Add(pageId, new NavigationPage(new About()));
-                        break;
-                }
+                Pages.Add(pageId, new NavigationPage(CreatablePages[pageId].CreatePage.Invoke()));
             }
 
             var newPage = Pages[pageId];

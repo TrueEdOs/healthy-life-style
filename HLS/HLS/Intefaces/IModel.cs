@@ -10,7 +10,7 @@ namespace HLS.Models
     {
         string Title { get; }
         string Description { get; }
-        ObservableCollection<T> Collection { get; set; }
-        ContentPage EditablePage { get; }
+        ObservableCollection<T> Collection { get; }
+        ContentPage EditablePage { get; }   
     }
 }

@@ -9,69 +9,45 @@ using Xamarin.Forms;
 
 namespace HLS.ViewModels
 {
-    class BasicListViewModel<T>
+    class BasicListViewModel<T> where T : IModel<T>
     {
         public ObservableCollection<T> collection;
-        public BasicRepresentationModel selectedItem;
-        public ObservableCollection<BasicRepresentationModel> RepresentationCollection { get; set; } = new ObservableCollection<BasicRepresentationModel>();
+        public T selectedItem;
+        public bool selected = false;
+        public ObservableCollection<T> RepresentationCollection => collection;
+        public App.CreatePage createPage;
 
-        public BasicListViewModel(ObservableCollection<T> collection)
+        public BasicListViewModel(ObservableCollection<T> collection, App.CreatePage createPage)
         {
             this.collection = collection;
-            foreach(var x in collection)
-            {
-                RepresentationCollection.Add(new BasicRepresentationModel((T)x));
-            }
-
-            RepresentationCollection.CollectionChanged += (sender, e) =>
-            {
-                if (e.OldItems == null)
-                    return;
-                foreach (var x in e.OldItems)
-                    if (collection.Contains((T)((BasicRepresentationModel)x).Original))
-                    {
-                        collection.Remove((T)((BasicRepresentationModel)x).Original);
-                    }
-            };
-
-            collection.CollectionChanged += (sender, e) =>
-            {
-                if (e.NewItems == null)
-                    return;
-                foreach (var x in e.NewItems)
-                {
-                    if ((T)x is Meal)
-                        Debug.Print("ASFASKHF");
-                    RepresentationCollection.Add(new BasicRepresentationModel((T)x));
-                }
-            };
+            this.createPage = createPage;
         }
 
         public async void Add(ContentPage page)
         {
-            if (typeof(T).Equals(typeof(Meal)))
-            {
-                await page.Navigation.PushAsync(new NewMealPage());
-                return;
-            }
-            
-            if (typeof(T).Equals(typeof(Tuple<Dish, double>)))
-            {
-                await page.Navigation.PushAsync(new NewExistingPage<Dish>((ObservableCollection < Tuple<Dish, double> >)(object) collection));
-                return;
-            }
-
-            throw new NotImplementedException();
+            await page.Navigation.PushAsync(createPage.Invoke());
         }
 
-        public void Edit(ContentPage page)
+        public async void Edit(ContentPage page)
         {
+            if (selectedItem == null)
+            {
+                // TO DO
+                return;
+            }
 
+            await page.Navigation.PushAsync(selectedItem.EditablePage);
         }
 
         public void Delete()
         {
+            if (selectedItem == null)
+            {
+                // TO DO
+                return;
+            }
 
+            collection.Remove(selectedItem);
         }
     }
 }
